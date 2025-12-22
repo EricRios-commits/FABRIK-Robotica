@@ -14,16 +14,22 @@ var joint_meshes: Array[MeshInstance3D] = []
 var segment_meshes: Array[MeshInstance3D] = []
 
 func _ready():
+	print("ready called")
 	chain = get_node_or_null("../IKChain")
 	if chain:
 		chain.chain_updated.connect(_on_chain_updated)
 		create_visualization()
+	else:
+		push_error("ChainVisualizer: IKChain node not found in parent.")
 
 ## Creates initial visualization
-func create_visualization():
+func create_visualization() -> void:
+	print("create_visualization called")
 	clear_visualization()
 	if not chain or chain.joints.is_empty():
+		print("No chain or joints to visualize")
 		return
+	print("visualizing chain with " + str(chain.joints.size()) + " joints")	
 	if show_joint_spheres:
 		for i in range(chain.joints.size()):
 			var mesh_instance = MeshInstance3D.new()
@@ -46,7 +52,7 @@ func create_visualization():
 	update_visualization()
 
 ## Updates visualization to match current chain state
-func update_visualization():
+func update_visualization() -> void:
 	if not chain or chain.joints.is_empty():
 		return
 	var positions = chain.get_positions()
@@ -72,7 +78,7 @@ func update_visualization():
 			segment_meshes[i].rotate_object_local(Vector3.RIGHT, PI / 2)
 
 ## Clears all visualization
-func clear_visualization():
+func clear_visualization() -> void:
 	for mesh in joint_meshes:
 		mesh.queue_free()
 	for mesh in segment_meshes:
@@ -80,5 +86,5 @@ func clear_visualization():
 	joint_meshes.clear()
 	segment_meshes.clear()
 
-func _on_chain_updated(_positions: Array[Vector3]):
+func _on_chain_updated(_positions: Array[Vector3]) -> void:
 	update_visualization()

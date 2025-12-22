@@ -35,8 +35,8 @@ func _input(event: InputEvent):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			is_dragging_target = event.pressed
-	if event is InputEventMouseMotion and is_dragging_target:
-		move_target_with_mouse(event.position)
+	# if event is InputEventMouseMotion and is_dragging_target:
+	# 	move_target_with_mouse(event.position)
 
 func move_target_with_mouse(screen_pos: Vector2):
 	if not camera or not target_visualizer:
@@ -50,11 +50,13 @@ func move_target_with_mouse(screen_pos: Vector2):
 func _on_algorithm_changed(algorithm_name: String):
 	if ik_controller:
 		ik_controller.set_solver_by_name(algorithm_name)
-		ik_controller.solve()
 
 func _on_parameters_changed(max_iterations: int, tolerance: float):
 	if ik_controller:
 		ik_controller.configure_solver(max_iterations, tolerance)
+
+func _on_solve_requested():
+	if ik_controller:
 		ik_controller.solve()
 
 func _on_reset_requested():

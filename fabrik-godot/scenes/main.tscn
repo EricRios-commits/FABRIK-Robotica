@@ -1,19 +1,25 @@
-[gd_scene load_steps=6 format=3 uid="uid://pwcja2iwl6ej"]
+[gd_scene load_steps=7 format=3 uid="uid://pwcja2iwl6ej"]
 
 [ext_resource type="Script" uid="uid://cwv0n52mn1n0k" path="res://scenes/main_scene.gd" id="1_tbgi4"]
 [ext_resource type="Script" uid="uid://cf0ebjoqwsgky" path="res://core/ik_controller.gd" id="2_tefeu"]
 [ext_resource type="Script" uid="uid://blys41lg01fyr" path="res://visualization/chain_visualizer.gd" id="3_o6xl0"]
 [ext_resource type="Script" uid="uid://bottxwpbkclic" path="res://visualization/target_visualizer.gd" id="4_tipki"]
 [ext_resource type="Script" uid="uid://d218u27sl8kf8" path="res://ui/ik_control_panel.gd" id="5_85g3d"]
+[ext_resource type="Script" uid="uid://ivj52hx2vhln" path="res://core/ik_chain.gd" id="6_tefeu"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_tbgi4")
+
+[node name="IKChain" type="Node3D" parent="."]
+script = ExtResource("6_tefeu")
+metadata/_custom_type_script = "uid://ivj52hx2vhln"
 
 [node name="IKController" type="Node3D" parent="."]
 script = ExtResource("2_tefeu")
 
 [node name="ChainVisualizer" type="Node3D" parent="."]
 script = ExtResource("3_o6xl0")
+segment_color = Color(1, 1, 0, 1)
 
 [node name="TargetVisualizer" type="Node3D" parent="."]
 script = ExtResource("4_tipki")
@@ -48,8 +54,14 @@ layout_mode = 2
 [node name="IterationSlider" type="HSlider" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
 layout_mode = 2
 
+[node name="SolveButton" type="Button" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
+layout_mode = 2
+text = "Solve IK"
+
 [node name="ResetButton" type="Button" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
 layout_mode = 2
 
 [node name="StatsLabel" type="Label" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
 layout_mode = 2
+
+[connection signal="pressed" from="CanvasLayer/IKControlPanel/VBoxContainer/SolveButton" to="." method="_on_solve_requested"]

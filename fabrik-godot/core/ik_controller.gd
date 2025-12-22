@@ -5,7 +5,7 @@ class_name IKController extends Node
 ## Emitted when solving is complete
 signal solve_completed(positions: Array[Vector3], iterations: int, final_error: float)
 
-@export var auto_solve: bool = true
+@export var auto_solve: bool = false
 @export var max_iterations: int = 10
 @export var tolerance: float = 0.01
 
@@ -15,11 +15,7 @@ var target_position: Vector3 = Vector3.ZERO
 var is_solving: bool = false
 
 func _ready():
-	chain = get_node_or_null("IKChain")
-	if not chain:
-		chain = IKChain.new()
-		chain.name = "IKChain"
-		add_child(chain)
+	chain = get_node_or_null("../IKChain")
 	set_solver(IKSolverFactory.SolverType.FABRIK)
 
 ## Sets the IK solver to use
@@ -43,12 +39,14 @@ func set_target(target: Vector3):
 		solve()
 
 ## Performs IK solving
-func solve():
+func solve() -> void:
 	if is_solving or not solver or not chain:
+		push_warning("Cannot solve IK: Solver or chain not set, or already solving.")
 		return
+	print("Solving")
 	is_solving = true
-	var current_positions = chain.get_positions()
-	var new_positions = solver.solve(current_positions, target_position)
+	var current_positions := chain.get_positions()
+	var new_positions := solver.solve(current_positions, target_position)
 	chain.update_positions(new_positions)
 	is_solving = false
 	var final_error = new_positions[new_positions.size() - 1].distance_to(target_position)
@@ -66,3 +64,7 @@ func configure_solver(new_max_iterations: int, new_tolerance: float):
 	if solver:
 		solver.max_iterations = max_iterations
 		solver.tolerance = tolerance
+
+
+func _on_solve_button_pressed() -> void:
+	solve()

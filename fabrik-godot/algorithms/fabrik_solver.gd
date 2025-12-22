@@ -4,7 +4,9 @@ class_name FABRIKSolver extends IKSolver
 
 ## Solves IK using FABRIK algorithm
 func solve(chain: Array[Vector3], target: Vector3, constraints: Array = []) -> Array[Vector3]:
+	print("Solving with FABRIK Solver")
 	if not validate_chain(chain):
+		push_error("Invalid chain provided to FABRIK solver.")
 		return chain
 	var positions: Array[Vector3] = chain.duplicate()
 	var root = positions[0]
@@ -17,7 +19,6 @@ func solve(chain: Array[Vector3], target: Vector3, constraints: Array = []) -> A
 		for i in range(1, positions.size()):
 			positions[i] = positions[i - 1] + direction * segment_lengths[i - 1]
 		return positions
-	
 	var iteration: int = 0
 	var distance_to_target = positions[positions.size() - 1].distance_to(target)
 	

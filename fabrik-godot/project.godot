@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="FABRIK"
-run/main_scene="uid://c6jeae5cnx822"
+run/main_scene="uid://pwcja2iwl6ej"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 

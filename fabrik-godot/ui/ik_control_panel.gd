@@ -4,12 +4,14 @@ class_name IKControlPanel extends Control
 signal algorithm_changed(algorithm_name: String)
 signal parameters_changed(max_iterations: int, tolerance: float)
 signal reset_requested()
+signal solve_requested()
 
 @onready var algorithm_selector: OptionButton = $VBoxContainer/AlgorithmSelector
 @onready var iteration_slider: HSlider = $VBoxContainer/IterationSlider
 @onready var tolerance_slider: HSlider = $VBoxContainer/ToleranceSlider
 @onready var iteration_label: Label = $VBoxContainer/IterationLabel
 @onready var tolerance_label: Label = $VBoxContainer/ToleranceLabel
+@onready var solve_button: Button = $VBoxContainer/SolveButton
 @onready var reset_button: Button = $VBoxContainer/ResetButton
 @onready var stats_label: Label = $VBoxContainer/StatsLabel
 
@@ -42,6 +44,8 @@ func connect_signals():
 		iteration_slider.value_changed.connect(_on_iteration_changed)
 	if tolerance_slider:
 		tolerance_slider.value_changed.connect(_on_tolerance_changed)
+	if solve_button:
+		solve_button.pressed.connect(_on_solve_pressed)
 	if reset_button:
 		reset_button.pressed.connect(_on_reset_pressed)
 
@@ -56,6 +60,9 @@ func _on_iteration_changed(value: float):
 func _on_tolerance_changed(value: float):
 	update_tolerance_label(value)
 	emit_parameters()
+
+func _on_solve_pressed():
+	solve_requested.emit()
 
 func _on_reset_pressed():
 	reset_requested.emit()

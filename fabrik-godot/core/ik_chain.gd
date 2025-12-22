@@ -38,7 +38,7 @@ func get_positions() -> Array[Vector3]:
 	return joint_positions
 
 ## Updates joint positions
-func update_positions(new_positions: Array[Vector3]):
+func update_positions(new_positions: Array[Vector3]) -> void:
 	if new_positions.size() != joints.size():
 		push_error("Position array size mismatch")
 		return
@@ -60,7 +60,7 @@ func get_end_effector_position() -> Vector3:
 	return joints[joints.size() - 1].global_position
 
 ## Resets chain to initial configuration
-func reset():
+func reset() -> void:
 	if joints.is_empty():
 		return
 	var direction = initial_orientation.normalized()
