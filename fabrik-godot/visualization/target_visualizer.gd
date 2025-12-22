@@ -8,17 +8,17 @@ class_name TargetVisualizer extends Node3D
 var mesh_instance: MeshInstance3D
 var controller: IKController
 
-func _ready():
+func _ready() -> void:
 	create_target_mesh()
 	controller = get_node_or_null("../IKController")
 
 ## Creates the target visualization mesh
-func create_target_mesh():
+func create_target_mesh() -> void:
 	mesh_instance = MeshInstance3D.new()
-	var sphere_mesh = SphereMesh.new()
+	var sphere_mesh: SphereMesh = SphereMesh.new()
 	sphere_mesh.radius = target_size
 	sphere_mesh.height = target_size * 2
-	var material = StandardMaterial3D.new()
+	var material: StandardMaterial3D = StandardMaterial3D.new()
 	material.albedo_color = target_color
 	material.emission_enabled = true
 	material.emission = target_color
@@ -29,19 +29,21 @@ func create_target_mesh():
 	add_child(mesh_instance)
 
 ## Updates target position
-func set_target_position(target: Vector3):
+func set_target_position(target: Vector3) -> void:
 	global_position = target
 	if controller:
 		controller.set_target(target)
 
 ## Updates target color based on reachability
-func update_reachability_indicator(is_reachable: bool):
+func update_reachability_indicator(is_reachable: bool) -> void:
 	if not show_reach_indicator or not mesh_instance:
 		return
-	var material = mesh_instance.mesh.material as StandardMaterial3D
+	var material: StandardMaterial3D = mesh_instance.mesh.material as StandardMaterial3D
 	if is_reachable:
 		material.albedo_color = Color.GREEN
 		material.emission = Color.GREEN
 	else:
 		material.albedo_color = Color.ORANGE
 		material.emission = Color.ORANGE
+
+

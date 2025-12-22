@@ -13,16 +13,16 @@ signal chain_updated(positions: Array[Vector3])
 var joints: Array[Node3D] = []
 var joint_positions: Array[Vector3] = []
 
-func _ready():
+func _ready() -> void:
 	if joints.is_empty():
 		create_default_chain()
 
 ## Creates a default chain if none exists
-func create_default_chain():
-	var direction = initial_orientation.normalized()
-	var current_pos = Vector3.ZERO
+func create_default_chain() -> void:
+	var direction: Vector3 = initial_orientation.normalized()
+	var current_pos: Vector3 = Vector3.ZERO
 	for i in range(joint_count):
-		var joint = Node3D.new()
+		var joint: Node3D = Node3D.new()
 		joint.name = "Joint_" + str(i)
 		joint.position = current_pos
 		add_child(joint)
@@ -63,9 +63,11 @@ func get_end_effector_position() -> Vector3:
 func reset() -> void:
 	if joints.is_empty():
 		return
-	var direction = initial_orientation.normalized()
-	var current_pos = get_root_position()
+	var direction: Vector3 = initial_orientation.normalized()
+	var current_pos: Vector3 = get_root_position()
 	for i in range(joints.size()):
 		joints[i].global_position = current_pos
 		current_pos += direction * segment_length
 	chain_updated.emit(get_positions())
+
+

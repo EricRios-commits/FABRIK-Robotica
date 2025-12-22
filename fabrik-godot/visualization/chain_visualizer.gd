@@ -13,7 +13,7 @@ var chain: IKChain
 var joint_meshes: Array[MeshInstance3D] = []
 var segment_meshes: Array[MeshInstance3D] = []
 
-func _ready():
+func _ready() -> void:
 	print("ready called")
 	chain = get_node_or_null("../IKChain")
 	if chain:
@@ -32,11 +32,11 @@ func create_visualization() -> void:
 	print("visualizing chain with " + str(chain.joints.size()) + " joints")	
 	if show_joint_spheres:
 		for i in range(chain.joints.size()):
-			var mesh_instance = MeshInstance3D.new()
-			var sphere_mesh = SphereMesh.new()
+			var mesh_instance: MeshInstance3D = MeshInstance3D.new()
+			var sphere_mesh: SphereMesh = SphereMesh.new()
 			sphere_mesh.radius = joint_radius
 			sphere_mesh.height = joint_radius * 2
-			var material = StandardMaterial3D.new()
+			var material: StandardMaterial3D = StandardMaterial3D.new()
 			material.albedo_color = joint_color
 			sphere_mesh.material = material
 			mesh_instance.mesh = sphere_mesh
@@ -45,7 +45,7 @@ func create_visualization() -> void:
 			joint_meshes.append(mesh_instance)
 	if show_segments:
 		for i in range(chain.joints.size() - 1):
-			var mesh_instance = MeshInstance3D.new()
+			var mesh_instance: MeshInstance3D = MeshInstance3D.new()
 			mesh_instance.name = "Segment_" + str(i)
 			add_child(mesh_instance)
 			segment_meshes.append(mesh_instance)
@@ -55,20 +55,20 @@ func create_visualization() -> void:
 func update_visualization() -> void:
 	if not chain or chain.joints.is_empty():
 		return
-	var positions = chain.get_positions()
+	var positions: Array[Vector3] = chain.get_positions()
 	for i in range(min(joint_meshes.size(), positions.size())):
 		joint_meshes[i].global_position = positions[i]
 	for i in range(min(segment_meshes.size(), positions.size() - 1)):
-		var start = positions[i]
-		var end = positions[i + 1]
-		var mid = (start + end) / 2.0
-		var direction = end - start
-		var length = direction.length()
-		var cylinder = CylinderMesh.new()
+		var start: Vector3 = positions[i]
+		var end: Vector3 = positions[i + 1]
+		var mid: Vector3 = (start + end) / 2.0
+		var direction: Vector3 = end - start
+		var length: float = direction.length()
+		var cylinder: CylinderMesh = CylinderMesh.new()
 		cylinder.top_radius = segment_thickness
 		cylinder.bottom_radius = segment_thickness
 		cylinder.height = length
-		var material = StandardMaterial3D.new()
+		var material: StandardMaterial3D = StandardMaterial3D.new()
 		material.albedo_color = segment_color
 		cylinder.material = material
 		segment_meshes[i].mesh = cylinder

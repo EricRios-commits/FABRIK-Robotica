@@ -9,6 +9,7 @@ signal iteration_completed(iteration: int, error: float)
 var max_iterations: int = 10
 var tolerance: float = 0.01
 var enable_debug: bool = false
+var step_executor: StepExecutor = null 
 
 ## Solves the IK problem for the given chain to reach the target position
 ## @param chain: Array of joint positions (Vector3)
@@ -40,6 +41,6 @@ func calculate_chain_length(chain: Array[Vector3]) -> float:
 
 ## Checks if target is reachable
 func is_target_reachable(chain: Array[Vector3], target: Vector3, root: Vector3) -> bool:
-	var chain_length = calculate_chain_length(chain)
-	var distance_to_target = root.distance_to(target)
+	var chain_length: float = calculate_chain_length(chain)
+	var distance_to_target: float = root.distance_to(target)
 	return distance_to_target <= chain_length
