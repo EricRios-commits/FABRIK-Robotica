@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c6jeae5cnx822"]
+
+[ext_resource type="Script" uid="uid://ivj52hx2vhln" path="res://core/ik_chain.gd" id="1_8y7j2"]
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_8y7j2")
