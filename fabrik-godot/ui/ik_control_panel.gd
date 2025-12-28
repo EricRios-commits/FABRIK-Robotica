@@ -6,6 +6,8 @@ signal parameters_changed(max_iterations: int, tolerance: float)
 signal reset_requested()
 signal solve_requested()
 signal next_step_requested()
+signal joint_count_changed(count: int)
+signal target_movement_toggled(enabled: bool)
 
 @onready var algorithm_selector: OptionButton = $VBoxContainer/AlgorithmSelector
 @onready var iteration_slider: HSlider = $VBoxContainer/IterationSlider
@@ -17,6 +19,9 @@ signal next_step_requested()
 @onready var next_step_button: Button = $VBoxContainer/NextStepButton
 @onready var step_info_label: Label = $VBoxContainer/StepInfoLabel
 @onready var stats_label: Label = $VBoxContainer/StatsLabel
+@onready var joint_count_label: Label = $VBoxContainer/JointCountLabel
+@onready var joint_count_spinbox: SpinBox = $VBoxContainer/JointCountSpinBox
+@onready var target_movement_checkbox: CheckBox = $VBoxContainer/TargetMovementCheckBox
 
 func _ready() -> void:
 	setup_ui()
@@ -43,6 +48,16 @@ func setup_ui() -> void:
 		next_step_button.text = "Next Step"
 	if step_info_label:
 		step_info_label.text = ""
+	if joint_count_label:
+		joint_count_label.text = "Number of Links:"
+	if joint_count_spinbox:
+		joint_count_spinbox.min_value = 2
+		joint_count_spinbox.max_value = 20
+		joint_count_spinbox.step = 1
+		joint_count_spinbox.value = 5
+	if target_movement_checkbox:
+		target_movement_checkbox.text = "Enable Target Movement"
+		target_movement_checkbox.button_pressed = false
 
 func connect_signals() -> void:
 	if algorithm_selector:
@@ -57,6 +72,10 @@ func connect_signals() -> void:
 		next_step_button.pressed.connect(_on_next_step_pressed)
 	if reset_button:
 		reset_button.pressed.connect(_on_reset_pressed)
+	if joint_count_spinbox:
+		joint_count_spinbox.value_changed.connect(_on_joint_count_changed)
+	if target_movement_checkbox:
+		target_movement_checkbox.toggled.connect(_on_target_movement_toggled)
 
 func _on_algorithm_selected(index: int) -> void:
 	var algorithm_name: String = algorithm_selector.get_item_text(index)
@@ -106,3 +125,10 @@ func update_step_info(step_info: Dictionary) -> void:
 			step_info.get("error", 0.0)
 		]
 		step_info_label.text = text
+
+func _on_joint_count_changed(value: float) -> void:
+	joint_count_changed.emit(int(value))
+
+func _on_target_movement_toggled(pressed: bool) -> void:
+	target_movement_toggled.emit(pressed)
+

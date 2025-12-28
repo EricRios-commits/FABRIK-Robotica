@@ -70,4 +70,17 @@ func reset() -> void:
 		current_pos += direction * segment_length
 	chain_updated.emit(get_positions())
 
+## Recreates the chain with a new joint count
+func set_joint_count(new_count: int) -> void:
+	if new_count < 2:
+		push_error("Joint count must be at least 2")
+		return
+	for joint in joints:
+		joint.queue_free()
+	joints.clear()
+	joint_positions.clear()
+	joint_count = new_count
+	create_default_chain()
+	chain_updated.emit(get_positions())
+
 

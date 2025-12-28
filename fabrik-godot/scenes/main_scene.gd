@@ -10,6 +10,7 @@ extends Node3D
 
 var is_dragging_target: bool = false
 var drag_plane: Plane = Plane(Vector3.FORWARD, 0)
+var target_movement_enabled: bool = false
 
 func _ready() -> void:
 	setup_scene()
@@ -30,16 +31,20 @@ func connect_signals() -> void:
 		control_panel.reset_requested.connect(_on_reset_requested)
 		control_panel.solve_requested.connect(_on_solve_requested)
 		control_panel.next_step_requested.connect(_on_next_step_requested)
+		control_panel.joint_count_changed.connect(_on_joint_count_changed)
+		control_panel.target_movement_toggled.connect(_on_target_movement_toggled)
 	if ik_controller:
 		ik_controller.solve_completed.connect(_on_solve_completed)
 		ik_controller.step_executed.connect(_on_step_executed)
 
 func _input(event: InputEvent) -> void:
+	if not target_movement_enabled:
+		return
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			is_dragging_target = event.pressed
-	# if event is InputEventMouseMotion and is_dragging_target:
-	# 	move_target_with_mouse(event.position)
+	if event is InputEventMouseMotion and is_dragging_target:
+		move_target_with_mouse(event.position)
 
 func move_target_with_mouse(screen_pos: Vector2) -> void:
 	if not camera or not target_visualizer:
@@ -85,3 +90,13 @@ func _on_next_step_requested() -> void:
 func _on_step_executed(step_info: Dictionary) -> void:
 	if control_panel:
 		control_panel.update_step_info(step_info)
+
+func _on_joint_count_changed(count: int) -> void:
+	if ik_controller and ik_controller.chain:
+		ik_controller.chain.set_joint_count(count)
+		if chain_visualizer:
+			chain_visualizer.create_visualization()
+
+func _on_target_movement_toggled(enabled: bool) -> void:
+	target_movement_enabled = enabled
+

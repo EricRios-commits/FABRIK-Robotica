@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://pwcja2iwl6ej"]
+[gd_scene load_steps=10 format=3 uid="uid://pwcja2iwl6ej"]
 
 [ext_resource type="Script" uid="uid://cwv0n52mn1n0k" path="res://scenes/main_scene.gd" id="1_tbgi4"]
 [ext_resource type="Script" uid="uid://cf0ebjoqwsgky" path="res://core/ik_controller.gd" id="2_tefeu"]
@@ -6,6 +6,20 @@
 [ext_resource type="Script" uid="uid://bottxwpbkclic" path="res://visualization/target_visualizer.gd" id="4_tipki"]
 [ext_resource type="Script" uid="uid://d218u27sl8kf8" path="res://ui/ik_control_panel.gd" id="5_85g3d"]
 [ext_resource type="Script" uid="uid://ivj52hx2vhln" path="res://core/ik_chain.gd" id="6_tefeu"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tefeu"]
+sky_top_color = Color(0.546, 0.57199997, 0.65, 1)
+sky_horizon_color = Color(0.54509807, 0.57254905, 0.6509804, 1)
+ground_bottom_color = Color(0.54509807, 0.57254905, 0.6509804, 1)
+ground_horizon_color = Color(0.54509807, 0.57254905, 0.6509804, 1)
+
+[sub_resource type="Sky" id="Sky_tefeu"]
+sky_material = SubResource("ProceduralSkyMaterial_tefeu")
+
+[sub_resource type="Environment" id="Environment_o6xl0"]
+background_mode = 2
+sky = SubResource("Sky_tefeu")
+ambient_light_color = Color(1, 1, 1, 1)
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_tbgi4")
@@ -42,6 +56,17 @@ offset_bottom = 153.0
 [node name="AlgorithmSelector" type="OptionButton" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
 layout_mode = 2
 
+[node name="JointCountLabel" type="Label" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
+layout_mode = 2
+text = "Number of Links:"
+
+[node name="JointCountSpinBox" type="SpinBox" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="TargetMovementCheckBox" type="CheckBox" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
+layout_mode = 2
+text = "Enable Target Movement"
+
 [node name="ToleranceLabel" type="Label" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
 layout_mode = 2
 
@@ -73,3 +98,6 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="IterationLabel" type="Label" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_o6xl0")
