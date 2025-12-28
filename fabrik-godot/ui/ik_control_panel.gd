@@ -8,6 +8,7 @@ signal solve_requested()
 signal next_step_requested()
 signal joint_count_changed(count: int)
 signal target_movement_toggled(enabled: bool)
+signal auto_solve_toggled(enabled: bool)
 
 @onready var algorithm_selector: OptionButton = $VBoxContainer/AlgorithmSelector
 @onready var iteration_slider: HSlider = $VBoxContainer/IterationSlider
@@ -22,6 +23,7 @@ signal target_movement_toggled(enabled: bool)
 @onready var joint_count_label: Label = $VBoxContainer/JointCountLabel
 @onready var joint_count_spinbox: SpinBox = $VBoxContainer/JointCountSpinBox
 @onready var target_movement_checkbox: CheckBox = $VBoxContainer/TargetMovementCheckBox
+@onready var auto_solve_checkbox: CheckBox = $VBoxContainer/AutoSolveCheckBox
 
 func _ready() -> void:
 	setup_ui()
@@ -58,6 +60,9 @@ func setup_ui() -> void:
 	if target_movement_checkbox:
 		target_movement_checkbox.text = "Enable Target Movement"
 		target_movement_checkbox.button_pressed = false
+	if auto_solve_checkbox:
+		auto_solve_checkbox.text = "Auto Solve"
+		auto_solve_checkbox.button_pressed = false
 
 func connect_signals() -> void:
 	if algorithm_selector:
@@ -76,6 +81,8 @@ func connect_signals() -> void:
 		joint_count_spinbox.value_changed.connect(_on_joint_count_changed)
 	if target_movement_checkbox:
 		target_movement_checkbox.toggled.connect(_on_target_movement_toggled)
+	if auto_solve_checkbox:
+		auto_solve_checkbox.toggled.connect(_on_auto_solve_toggled)
 
 func _on_algorithm_selected(index: int) -> void:
 	var algorithm_name: String = algorithm_selector.get_item_text(index)
@@ -131,4 +138,7 @@ func _on_joint_count_changed(value: float) -> void:
 
 func _on_target_movement_toggled(pressed: bool) -> void:
 	target_movement_toggled.emit(pressed)
+
+func _on_auto_solve_toggled(pressed: bool) -> void:
+	auto_solve_toggled.emit(pressed)
 

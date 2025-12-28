@@ -11,6 +11,7 @@ extends Node3D
 var is_dragging_target: bool = false
 var drag_plane: Plane = Plane(Vector3.FORWARD, 0)
 var target_movement_enabled: bool = false
+var auto_solve_enabled: bool = false
 
 func _ready() -> void:
 	setup_scene()
@@ -33,6 +34,7 @@ func connect_signals() -> void:
 		control_panel.next_step_requested.connect(_on_next_step_requested)
 		control_panel.joint_count_changed.connect(_on_joint_count_changed)
 		control_panel.target_movement_toggled.connect(_on_target_movement_toggled)
+		control_panel.auto_solve_toggled.connect(_on_auto_solve_toggled)
 	if ik_controller:
 		ik_controller.solve_completed.connect(_on_solve_completed)
 		ik_controller.step_executed.connect(_on_step_executed)
@@ -72,8 +74,6 @@ func _on_reset_requested() -> void:
 	if ik_controller:
 		ik_controller.set_step_mode(false)
 		ik_controller.reset_chain()
-	if target_visualizer:
-		target_visualizer.set_target_position(Vector3(2, 2, 0))
 
 func _on_solve_completed(_positions: Array[Vector3], iterations: int, final_error: float) -> void:
 	if control_panel and ik_controller and ik_controller.solver:
@@ -100,3 +100,7 @@ func _on_joint_count_changed(count: int) -> void:
 func _on_target_movement_toggled(enabled: bool) -> void:
 	target_movement_enabled = enabled
 
+func _on_auto_solve_toggled(enabled: bool) -> void:
+	auto_solve_enabled = enabled
+	if ik_controller:
+		ik_controller.auto_solve = enabled

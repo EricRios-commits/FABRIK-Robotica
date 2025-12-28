@@ -39,6 +39,9 @@ segment_color = Color(1, 1, 0, 1)
 script = ExtResource("4_tipki")
 
 [node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.23479745)
+projection = 1
+size = 2.385
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -66,6 +69,10 @@ layout_mode = 2
 [node name="TargetMovementCheckBox" type="CheckBox" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
 layout_mode = 2
 text = "Enable Target Movement"
+
+[node name="AutoSolveCheckBox" type="CheckBox" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
+layout_mode = 2
+text = "Auto Solve"
 
 [node name="ToleranceLabel" type="Label" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
 layout_mode = 2
