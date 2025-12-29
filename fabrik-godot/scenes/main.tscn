@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://pwcja2iwl6ej"]
+[gd_scene load_steps=11 format=3 uid="uid://pwcja2iwl6ej"]
 
 [ext_resource type="Script" uid="uid://cwv0n52mn1n0k" path="res://scenes/main_scene.gd" id="1_tbgi4"]
 [ext_resource type="Script" uid="uid://cf0ebjoqwsgky" path="res://core/ik_controller.gd" id="2_tefeu"]
 [ext_resource type="Script" uid="uid://blys41lg01fyr" path="res://visualization/chain_visualizer.gd" id="3_o6xl0"]
 [ext_resource type="Script" uid="uid://bottxwpbkclic" path="res://visualization/target_visualizer.gd" id="4_tipki"]
 [ext_resource type="Script" uid="uid://d218u27sl8kf8" path="res://ui/ik_control_panel.gd" id="5_85g3d"]
+[ext_resource type="Script" uid="uid://r7vnaa5a2eu2" path="res://core/camera_auto_fit.gd" id="6_o6xl0"]
 [ext_resource type="Script" uid="uid://ivj52hx2vhln" path="res://core/ik_chain.gd" id="6_tefeu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tefeu"]
@@ -42,6 +43,9 @@ script = ExtResource("4_tipki")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.23479745)
 projection = 1
 size = 2.385
+script = ExtResource("6_o6xl0")
+chain_path = NodePath("../IKChain")
+margin = 2.5
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

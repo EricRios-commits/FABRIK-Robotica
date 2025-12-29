@@ -13,8 +13,6 @@ func _ready():
 	projection = PROJECTION_ORTHOGONAL
 	if str(chain_path) != "":
 		chain = get_node_or_null(chain_path)
-	if not chain:
-		chain = get_tree().get_root().find_node("IKChain", true, false)
 	if chain:
 		if chain.has_signal("chain_updated"):
 			chain.chain_updated.connect(_on_chain_updated)
