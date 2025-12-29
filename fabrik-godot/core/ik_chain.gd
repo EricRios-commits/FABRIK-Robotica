@@ -16,6 +16,7 @@ var joint_positions: Array[Vector3] = []
 func _ready() -> void:
 	if joints.is_empty():
 		create_default_chain()
+	chain_updated.emit(get_positions())
 
 ## Creates a default chain if none exists
 func create_default_chain() -> void:
@@ -82,5 +83,3 @@ func set_joint_count(new_count: int) -> void:
 	joint_count = new_count
 	create_default_chain()
 	chain_updated.emit(get_positions())
-
-
