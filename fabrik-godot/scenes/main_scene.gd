@@ -46,7 +46,7 @@ func connect_signals() -> void:
 		ik_controller.step_executed.connect(_on_step_executed)
 		ik_controller.target_updated.connect(_on_target_updated)
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	if not target_movement_enabled:
 		return
 	if event is InputEventMouseButton:

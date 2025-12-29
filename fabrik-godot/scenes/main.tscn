@@ -113,6 +113,24 @@ text = "Next Step"
 layout_mode = 2
 text = "Reset"
 
+[node name="YawLabel" type="Label" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
+layout_mode = 2
+text = "Yaw:"
+
+[node name="CameraYawSlider" type="HSlider" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
+layout_mode = 2
+min_value = -180.0
+max_value = 180.0
+
+[node name="PitchLabel" type="Label" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
+layout_mode = 2
+text = "Pitch:"
+
+[node name="CameraPitchSlider" type="HSlider" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
+layout_mode = 2
+min_value = -89.0
+max_value = 89.0
+
 [node name="StepInfoLabel" type="Label" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
 layout_mode = 2
 
@@ -123,17 +141,3 @@ layout_mode = 2
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_o6xl0")
-
-[node name="CameraYawSlider" type="HSlider" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
-layout_mode = 2
-step = 1
-min_value = -180
-max_value = 180
-value = 0
-
-[node name="CameraPitchSlider" type="HSlider" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
-layout_mode = 2
-step = 1
-min_value = -89
-max_value = 89
-value = 0
