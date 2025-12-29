@@ -41,7 +41,6 @@ script = ExtResource("4_tipki")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.23479745)
-projection = 1
 size = 2.385
 script = ExtResource("6_o6xl0")
 chain_path = NodePath("../IKChain")
@@ -77,6 +76,18 @@ text = "Enable Target Movement"
 [node name="AutoSolveCheckBox" type="CheckBox" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
 layout_mode = 2
 text = "Auto Solve"
+
+[node name="TargetPositionX" type="SpinBox" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
+layout_mode = 2
+step = 0.1
+
+[node name="TargetPositionY" type="SpinBox" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
+layout_mode = 2
+step = 0.1
+
+[node name="TargetPositionZ" type="SpinBox" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
+layout_mode = 2
+step = 0.1
 
 [node name="ToleranceLabel" type="Label" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
 layout_mode = 2

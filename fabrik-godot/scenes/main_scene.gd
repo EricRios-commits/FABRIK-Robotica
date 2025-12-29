@@ -35,6 +35,7 @@ func connect_signals() -> void:
 		control_panel.joint_count_changed.connect(_on_joint_count_changed)
 		control_panel.target_movement_toggled.connect(_on_target_movement_toggled)
 		control_panel.auto_solve_toggled.connect(_on_auto_solve_toggled)
+		control_panel.set_target_position.connect(set_target_position)
 	if ik_controller:
 		ik_controller.solve_completed.connect(_on_solve_completed)
 		ik_controller.step_executed.connect(_on_step_executed)
@@ -56,6 +57,10 @@ func move_target_with_mouse(screen_pos: Vector2) -> void:
 	var intersection: Variant = drag_plane.intersects_ray(from, direction)
 	if intersection:
 		target_visualizer.set_target_position(intersection)
+		
+func set_target_position(position : Vector3) -> void:
+	if target_visualizer:
+		target_visualizer.set_target_position(position)
 
 func _on_algorithm_changed(algorithm_name: String) -> void:
 	if ik_controller:

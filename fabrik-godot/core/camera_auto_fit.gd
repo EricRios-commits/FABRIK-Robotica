@@ -10,7 +10,6 @@ var chain = null
 var last_joint_count = -1
 
 func _ready():
-	projection = PROJECTION_ORTHOGONAL
 	if str(chain_path) != "":
 		chain = get_node_or_null(chain_path)
 	if chain:

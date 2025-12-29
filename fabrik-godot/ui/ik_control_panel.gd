@@ -9,6 +9,7 @@ signal next_step_requested()
 signal joint_count_changed(count: int)
 signal target_movement_toggled(enabled: bool)
 signal auto_solve_toggled(enabled: bool)
+signal set_target_position(position: Vector3)
 
 @onready var algorithm_selector: OptionButton = $VBoxContainer/AlgorithmSelector
 @onready var iteration_slider: HSlider = $VBoxContainer/IterationSlider
@@ -24,6 +25,9 @@ signal auto_solve_toggled(enabled: bool)
 @onready var joint_count_spinbox: SpinBox = $VBoxContainer/JointCountSpinBox
 @onready var target_movement_checkbox: CheckBox = $VBoxContainer/TargetMovementCheckBox
 @onready var auto_solve_checkbox: CheckBox = $VBoxContainer/AutoSolveCheckBox
+@onready var target_position_x: SpinBox = $VBoxContainer/TargetPositionX
+@onready var target_position_y: SpinBox = $VBoxContainer/TargetPositionY
+@onready var target_position_z: SpinBox = $VBoxContainer/TargetPositionZ
 
 func _ready() -> void:
 	setup_ui()
@@ -63,6 +67,21 @@ func setup_ui() -> void:
 	if auto_solve_checkbox:
 		auto_solve_checkbox.text = "Auto Solve"
 		auto_solve_checkbox.button_pressed = false
+	if target_position_x:
+		target_position_x.min_value = -100.0
+		target_position_x.max_value = 100.0
+		target_position_x.step = 0.1
+		target_position_x.value = 0.0
+	if target_position_y:
+		target_position_y.min_value = -100.0
+		target_position_y.max_value = 100.0
+		target_position_y.step = 0.1
+		target_position_y.value = 0.0
+	if target_position_z:
+		target_position_z.min_value = -100.0
+		target_position_z.max_value = 100.0
+		target_position_z.step = 0.1
+		target_position_z.value = 0.0
 
 func connect_signals() -> void:
 	if algorithm_selector:
@@ -83,6 +102,20 @@ func connect_signals() -> void:
 		target_movement_checkbox.toggled.connect(_on_target_movement_toggled)
 	if auto_solve_checkbox:
 		auto_solve_checkbox.toggled.connect(_on_auto_solve_toggled)
+	if target_position_x:
+		target_position_x.value_changed.connect(_on_target_position_changed)
+	if target_position_y:
+		target_position_y.value_changed.connect(_on_target_position_changed)
+	if target_position_z:
+		target_position_z.value_changed.connect(_on_target_position_changed)
+		
+func _on_target_position_changed(value: float) -> void:
+	var pos: Vector3 = Vector3(
+		target_position_x.value,
+		target_position_y.value,
+		target_position_z.value
+	)
+	set_target_position.emit(pos)
 
 func _on_algorithm_selected(index: int) -> void:
 	var algorithm_name: String = algorithm_selector.get_item_text(index)
