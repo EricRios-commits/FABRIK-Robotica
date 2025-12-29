@@ -32,7 +32,7 @@ func create_target_mesh() -> void:
 func set_target_position(target: Vector3) -> void:
 	global_position = target
 	if controller:
-		controller.set_target(target)
+		controller.target_updated.emit(target)
 
 ## Updates target color based on reachability
 func update_reachability_indicator(is_reachable: bool) -> void:

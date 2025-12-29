@@ -108,7 +108,15 @@ func connect_signals() -> void:
 		target_position_y.value_changed.connect(_on_target_position_changed)
 	if target_position_z:
 		target_position_z.value_changed.connect(_on_target_position_changed)
-		
+
+func set_target_fields(position: Vector3) -> void:
+	if target_position_x:
+		target_position_x.value = position.x
+	if target_position_y:
+		target_position_y.value = position.y
+	if target_position_z:
+		target_position_z.value = position.z
+
 func _on_target_position_changed(value: float) -> void:
 	var pos: Vector3 = Vector3(
 		target_position_x.value,

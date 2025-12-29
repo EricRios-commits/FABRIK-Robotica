@@ -6,6 +6,7 @@ class_name IKController extends Node
 signal solve_completed(positions: Array[Vector3], iterations: int, final_error: float)
 ## Emitted when a step is executed in step mode
 signal step_executed(step_info: Dictionary)
+signal target_updated(new_target: Vector3)
 
 @export var auto_solve: bool = false
 @export var max_iterations: int = 10
@@ -23,6 +24,7 @@ func _ready() -> void:
 	set_solver(IKSolverFactory.SolverType.FABRIK)
 	step_executor.step_executed.connect(_on_step_executed)
 	step_executor.execution_completed.connect(_on_execution_completed)
+	target_updated.connect(set_target)
 
 ## Sets the IK solver to use
 func set_solver(solver_type: IKSolverFactory.SolverType) -> void:
