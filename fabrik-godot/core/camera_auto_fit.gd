@@ -97,7 +97,8 @@ func fit_to_positions(positions):
 
 func _update_center(center_pos: Vector3, dist: float = -1.0):
 	var used_dist = dist if dist >= 0.0 else camera_distance
-	var cam_pos = center_pos + Vector3(0, 0, used_dist)
+	var forward: Vector3 = (-global_transform.basis.z).normalized()
+	var cam_pos = center_pos - forward * used_dist
 	global_position = cam_pos
 	look_at(center_pos, Vector3.UP)
 	near = max(0.01, used_dist * 0.01)

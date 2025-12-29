@@ -10,6 +10,7 @@ signal joint_count_changed(count: int)
 signal target_movement_toggled(enabled: bool)
 signal auto_solve_toggled(enabled: bool)
 signal set_target_position(position: Vector3)
+signal camera_orbit_changed(yaw_degrees: float, pitch_degrees: float)
 
 @onready var algorithm_selector: OptionButton = $VBoxContainer/AlgorithmSelector
 @onready var iteration_slider: HSlider = $VBoxContainer/IterationSlider
@@ -28,6 +29,8 @@ signal set_target_position(position: Vector3)
 @onready var target_position_x: SpinBox = $VBoxContainer/TargetPositionX
 @onready var target_position_y: SpinBox = $VBoxContainer/TargetPositionY
 @onready var target_position_z: SpinBox = $VBoxContainer/TargetPositionZ
+@onready var camera_yaw_slider: HSlider = $VBoxContainer/CameraYawSlider
+@onready var camera_pitch_slider: HSlider = $VBoxContainer/CameraPitchSlider
 
 func _ready() -> void:
 	setup_ui()
@@ -82,6 +85,16 @@ func setup_ui() -> void:
 		target_position_z.max_value = 100.0
 		target_position_z.step = 0.1
 		target_position_z.value = 0.0
+	if camera_yaw_slider:
+		camera_yaw_slider.min_value = -180
+		camera_yaw_slider.max_value = 180
+		camera_yaw_slider.step = 1
+		camera_yaw_slider.value = 0
+	if camera_pitch_slider:
+		camera_pitch_slider.min_value = -89
+		camera_pitch_slider.max_value = 89
+		camera_pitch_slider.step = 1
+		camera_pitch_slider.value = 0
 
 func connect_signals() -> void:
 	if algorithm_selector:
@@ -108,14 +121,18 @@ func connect_signals() -> void:
 		target_position_y.value_changed.connect(_on_target_position_changed)
 	if target_position_z:
 		target_position_z.value_changed.connect(_on_target_position_changed)
+	if camera_yaw_slider:
+		camera_yaw_slider.value_changed.connect(_on_camera_yaw_changed)
+	if camera_pitch_slider:
+		camera_pitch_slider.value_changed.connect(_on_camera_pitch_changed)
 
-func set_target_fields(position: Vector3) -> void:
+func set_target_fields(pos: Vector3) -> void:
 	if target_position_x:
-		target_position_x.value = position.x
+		target_position_x.value = pos.x
 	if target_position_y:
-		target_position_y.value = position.y
+		target_position_y.value = pos.y
 	if target_position_z:
-		target_position_z.value = position.z
+		target_position_z.value = pos.z
 
 func _on_target_position_changed(value: float) -> void:
 	var pos: Vector3 = Vector3(
@@ -124,6 +141,16 @@ func _on_target_position_changed(value: float) -> void:
 		target_position_z.value
 	)
 	set_target_position.emit(pos)
+
+func _on_camera_yaw_changed(value: float) -> void:
+	var yaw = float(value)
+	var pitch = camera_pitch_slider.value if camera_pitch_slider else 0.0
+	camera_orbit_changed.emit(yaw, pitch)
+
+func _on_camera_pitch_changed(value: float) -> void:
+	var pitch = float(value)
+	var yaw = camera_yaw_slider.value if camera_yaw_slider else 0.0
+	camera_orbit_changed.emit(yaw, pitch)
 
 func _on_algorithm_selected(index: int) -> void:
 	var algorithm_name: String = algorithm_selector.get_item_text(index)
@@ -182,4 +209,3 @@ func _on_target_movement_toggled(pressed: bool) -> void:
 
 func _on_auto_solve_toggled(pressed: bool) -> void:
 	auto_solve_toggled.emit(pressed)
-

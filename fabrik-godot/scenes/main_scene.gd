@@ -13,6 +13,9 @@ var drag_plane: Plane = Plane(Vector3.FORWARD, 0)
 var target_movement_enabled: bool = false
 var auto_solve_enabled: bool = false
 
+var camera_yaw: float = 0.0
+var camera_pitch: float = 0.0
+
 func _ready() -> void:
 	setup_scene()
 	connect_signals()
@@ -36,6 +39,8 @@ func connect_signals() -> void:
 		control_panel.target_movement_toggled.connect(_on_target_movement_toggled)
 		control_panel.auto_solve_toggled.connect(_on_auto_solve_toggled)
 		control_panel.set_target_position.connect(set_target_position)
+		if control_panel.has_signal("camera_orbit_changed"):
+			control_panel.camera_orbit_changed.connect(_on_camera_orbit_changed)
 	if ik_controller:
 		ik_controller.solve_completed.connect(_on_solve_completed)
 		ik_controller.step_executed.connect(_on_step_executed)
@@ -60,13 +65,41 @@ func move_target_with_mouse(screen_pos: Vector2) -> void:
 		target_visualizer.set_target_position(intersection)
 		control_panel.set_target_fields(intersection)
 		
-func set_target_position(position : Vector3) -> void:
+func set_target_position(pos : Vector3) -> void:
 	if target_visualizer:
-		target_visualizer.set_target_position(position)
+		target_visualizer.set_target_position(pos)
 		
 func _on_target_updated(new_target: Vector3) -> void:
 	if control_panel:
 		control_panel.set_target_fields(new_target)
+
+func _on_camera_orbit_changed(yaw_degrees: float, pitch_degrees: float) -> void:
+	camera_yaw = deg_to_rad(yaw_degrees)
+	camera_pitch = deg_to_rad(clamp(pitch_degrees, -89, 89))
+	apply_camera_orbit()
+
+func apply_camera_orbit() -> void:
+	if not camera:
+		return
+	var center: Vector3 = Vector3.ZERO
+	var positions: Array = []
+	if ik_controller and ik_controller.chain and ik_controller.chain.has_method("get_positions"):
+		positions = ik_controller.chain.get_positions()
+	if positions and len(positions) > 0:
+		for p in positions:
+			center += p
+		center /= float(len(positions))
+	else:
+		center = Vector3.ZERO
+	var dist: float = camera.global_position.distance_to(center)
+	if dist <= 0.0:
+		dist = 10.0
+	var x = dist * cos(camera_pitch) * sin(camera_yaw)
+	var y = dist * sin(camera_pitch)
+	var z = dist * cos(camera_pitch) * cos(camera_yaw)
+	var new_pos = center + Vector3(x, y, z)
+	camera.global_position = new_pos
+	camera.look_at(center, Vector3.UP)
 
 func _on_algorithm_changed(algorithm_name: String) -> void:
 	if ik_controller:
