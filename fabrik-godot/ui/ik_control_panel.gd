@@ -11,6 +11,7 @@ signal target_movement_toggled(enabled: bool)
 signal auto_solve_toggled(enabled: bool)
 signal set_target_position(position: Vector3)
 signal camera_orbit_changed(yaw_degrees: float, pitch_degrees: float)
+signal camera_zoom_changed(zoom_value: float)
 
 @onready var algorithm_selector: OptionButton = $VBoxContainer/AlgorithmSelector
 @onready var iteration_slider: HSlider = $VBoxContainer/IterationSlider
@@ -31,6 +32,7 @@ signal camera_orbit_changed(yaw_degrees: float, pitch_degrees: float)
 @onready var target_position_z: SpinBox = $VBoxContainer/TargetPositionZ
 @onready var camera_yaw_slider: HSlider = $VBoxContainer/CameraYawSlider
 @onready var camera_pitch_slider: HSlider = $VBoxContainer/CameraPitchSlider
+@onready var camera_zoom_slider: HSlider = $VBoxContainer/ZoomSlider
 
 func _ready() -> void:
 	setup_ui()
@@ -95,6 +97,11 @@ func setup_ui() -> void:
 		camera_pitch_slider.max_value = 89
 		camera_pitch_slider.step = 1
 		camera_pitch_slider.value = 0
+	if camera_zoom_slider:
+		camera_zoom_slider.min_value = 1.0
+		camera_zoom_slider.max_value = 50.0
+		camera_zoom_slider.step = 0.1
+		camera_zoom_slider.value = 10.0
 
 func connect_signals() -> void:
 	if algorithm_selector:
@@ -125,6 +132,8 @@ func connect_signals() -> void:
 		camera_yaw_slider.value_changed.connect(_on_camera_yaw_changed)
 	if camera_pitch_slider:
 		camera_pitch_slider.value_changed.connect(_on_camera_pitch_changed)
+	if camera_zoom_slider:
+		camera_zoom_slider.value_changed.connect(_on_camera_zoom_changed)
 
 func set_target_fields(pos: Vector3) -> void:
 	if target_position_x:
@@ -209,3 +218,6 @@ func _on_target_movement_toggled(pressed: bool) -> void:
 
 func _on_auto_solve_toggled(pressed: bool) -> void:
 	auto_solve_toggled.emit(pressed)
+
+func _on_camera_zoom_changed(value: float) -> void:
+	camera_zoom_changed.emit(value)

@@ -15,6 +15,7 @@ var auto_solve_enabled: bool = false
 
 var camera_yaw: float = 0.0
 var camera_pitch: float = 0.0
+var camera_zoom: float = 10.0
 
 func _ready() -> void:
 	setup_scene()
@@ -39,8 +40,8 @@ func connect_signals() -> void:
 		control_panel.target_movement_toggled.connect(_on_target_movement_toggled)
 		control_panel.auto_solve_toggled.connect(_on_auto_solve_toggled)
 		control_panel.set_target_position.connect(set_target_position)
-		if control_panel.has_signal("camera_orbit_changed"):
-			control_panel.camera_orbit_changed.connect(_on_camera_orbit_changed)
+		control_panel.camera_orbit_changed.connect(_on_camera_orbit_changed)
+		control_panel.camera_zoom_changed.connect(_on_camera_zoom_changed)
 	if ik_controller:
 		ik_controller.solve_completed.connect(_on_solve_completed)
 		ik_controller.step_executed.connect(_on_step_executed)
@@ -78,6 +79,10 @@ func _on_camera_orbit_changed(yaw_degrees: float, pitch_degrees: float) -> void:
 	camera_pitch = deg_to_rad(clamp(pitch_degrees, -89, 89))
 	apply_camera_orbit()
 
+func _on_camera_zoom_changed(value: float) -> void:
+	camera_zoom = float(value)
+	apply_camera_orbit()
+
 func apply_camera_orbit() -> void:
 	if not camera:
 		return
@@ -91,9 +96,7 @@ func apply_camera_orbit() -> void:
 		center /= float(len(positions))
 	else:
 		center = Vector3.ZERO
-	var dist: float = camera.global_position.distance_to(center)
-	if dist <= 0.0:
-		dist = 10.0
+	var dist: float = camera_zoom if camera_zoom > 0.0 else 10.0
 	var x = dist * cos(camera_pitch) * sin(camera_yaw)
 	var y = dist * sin(camera_pitch)
 	var z = dist * cos(camera_pitch) * cos(camera_yaw)

@@ -131,13 +131,20 @@ layout_mode = 2
 min_value = -89.0
 max_value = 89.0
 
+[node name="ZoomLabel" type="Label" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
+layout_mode = 2
+text = "Zoom:"
+
+[node name="ZoomSlider" type="HSlider" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
+layout_mode = 2
+min_value = -89.0
+max_value = 89.0
+
 [node name="StepInfoLabel" type="Label" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
 layout_mode = 2
 
 [node name="StatsLabel" type="Label" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
 layout_mode = 2
-
-[node name="IterationLabel" type="Label" parent="."]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_o6xl0")
