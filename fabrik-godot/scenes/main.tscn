@@ -47,10 +47,14 @@ chain_path = NodePath("../IKChain")
 margin = 2.5
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+follow_viewport_enabled = true
 
 [node name="IKControlPanel" type="Control" parent="CanvasLayer"]
 layout_mode = 3
 anchors_preset = 0
+scale = Vector2(0.7, 0.7)
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("5_85g3d")
 metadata/_custom_type_script = "uid://d218u27sl8kf8"
 

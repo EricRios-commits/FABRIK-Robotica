@@ -27,11 +27,8 @@ func solve(chain: Array[Vector3], target: Vector3, _constraints: Array = []) -> 
 			step_executor.add_step(positions, 0, positions[positions.size() - 1].distance_to(target),
 				"Target unreachable - stretching toward target", "")
 		return positions
-	
 	var iteration: int = 0
 	var distance_to_target: float = positions[positions.size() - 1].distance_to(target)
-	
-	# Iterate until close enough or max iterations reached
 	while distance_to_target > tolerance and iteration < max_iterations:
 		positions[positions.size() - 1] = target
 		if step_executor:

@@ -20,6 +20,7 @@ var camera_zoom: float = 10.0
 func _ready() -> void:
 	setup_scene()
 	connect_signals()
+	apply_camera_orbit()
 
 func setup_scene() -> void:
 	if camera:
