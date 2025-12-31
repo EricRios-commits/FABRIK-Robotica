@@ -7,6 +7,7 @@ extends Node3D
 @onready var target_visualizer: TargetVisualizer = $TargetVisualizer
 @onready var camera: Camera3D = $Camera3D
 @onready var control_panel: IKControlPanel = $CanvasLayer/IKControlPanel
+@onready var grid_visualizer: GridVisualizer = $GridVisualizer
 
 var is_dragging_target: bool = false
 var drag_plane: Plane = Plane(Vector3.FORWARD, 0)
@@ -40,9 +41,10 @@ func connect_signals() -> void:
 		control_panel.joint_count_changed.connect(_on_joint_count_changed)
 		control_panel.target_movement_toggled.connect(_on_target_movement_toggled)
 		control_panel.auto_solve_toggled.connect(_on_auto_solve_toggled)
-		control_panel.set_target_position.connect(set_target_position)
+		control_panel.set_target_position.connect(_set_target_position)
 		control_panel.camera_orbit_changed.connect(_on_camera_orbit_changed)
 		control_panel.camera_zoom_changed.connect(_on_camera_zoom_changed)
+		control_panel.grid_visibility_changed.connect(_on_grid_visibility_changed)
 	if ik_controller:
 		ik_controller.solve_completed.connect(_on_solve_completed)
 		ik_controller.step_executed.connect(_on_step_executed)
@@ -55,9 +57,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			is_dragging_target = event.pressed
 	if event is InputEventMouseMotion and is_dragging_target:
-		move_target_with_mouse(event.position)
+		_move_target_with_mouse(event.position)
 
-func move_target_with_mouse(screen_pos: Vector2) -> void:
+func _move_target_with_mouse(screen_pos: Vector2) -> void:
 	if not camera or not target_visualizer:
 		return
 	var from: Vector3 = camera.project_ray_origin(screen_pos)
@@ -67,9 +69,13 @@ func move_target_with_mouse(screen_pos: Vector2) -> void:
 		target_visualizer.set_target_position(intersection)
 		control_panel.set_target_fields(intersection)
 		
-func set_target_position(pos : Vector3) -> void:
+func _set_target_position(pos : Vector3) -> void:
 	if target_visualizer:
 		target_visualizer.set_target_position(pos)
+		
+func _on_grid_visibility_changed(xy: bool, xz: bool, yz: bool) -> void:
+	if grid_visualizer:
+		grid_visualizer._set_plane_visibility(xy, xz, yz)
 		
 func _on_target_updated(new_target: Vector3) -> void:
 	if control_panel:

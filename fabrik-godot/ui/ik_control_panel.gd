@@ -12,6 +12,7 @@ signal auto_solve_toggled(enabled: bool)
 signal set_target_position(position: Vector3)
 signal camera_orbit_changed(yaw_degrees: float, pitch_degrees: float)
 signal camera_zoom_changed(zoom_value: float)
+signal grid_visibility_changed(xy: bool, xz: bool, yz: bool)
 
 @onready var algorithm_selector: OptionButton = $VBoxContainer/AlgorithmSelector
 @onready var iteration_slider: HSlider = $VBoxContainer/IterationSlider
@@ -33,6 +34,9 @@ signal camera_zoom_changed(zoom_value: float)
 @onready var camera_yaw_slider: HSlider = $VBoxContainer/CameraYawSlider
 @onready var camera_pitch_slider: HSlider = $VBoxContainer/CameraPitchSlider
 @onready var camera_zoom_slider: HSlider = $VBoxContainer/ZoomSlider
+@onready var xy_checkbox: CheckBox = $VBoxContainer/GridButtonContainer/XYContainer/XYCheckbox
+@onready var xz_checkbox: CheckBox = $VBoxContainer/GridButtonContainer/XZContainer/XZCheckbox
+@onready var yz_checkbox: CheckBox = $VBoxContainer/GridButtonContainer/YZ/YZCheckbox
 
 func _ready() -> void:
 	setup_ui()
@@ -134,7 +138,17 @@ func connect_signals() -> void:
 		camera_pitch_slider.value_changed.connect(_on_camera_pitch_changed)
 	if camera_zoom_slider:
 		camera_zoom_slider.value_changed.connect(_on_camera_zoom_changed)
+	if xy_checkbox:
+		xy_checkbox.toggled.connect(_on_grid_toggled)
+	if xz_checkbox:
+		xz_checkbox.toggled.connect(_on_grid_toggled)
+	if yz_checkbox:
+		yz_checkbox.toggled.connect(_on_grid_toggled)
 
+func _on_grid_toggled(_toggled: bool) -> void:
+	print("Grid toggled: XY=%s, XZ=%s, YZ=%s" % [xy_checkbox.button_pressed, xz_checkbox.button_pressed, yz_checkbox.button_pressed])
+	grid_visibility_changed.emit(xy_checkbox.button_pressed, xz_checkbox.button_pressed, yz_checkbox.button_pressed)
+	
 func set_target_fields(pos: Vector3) -> void:
 	if target_position_x:
 		target_position_x.value = pos.x

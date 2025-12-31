@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://pwcja2iwl6ej"]
+[gd_scene load_steps=12 format=3 uid="uid://pwcja2iwl6ej"]
 
 [ext_resource type="Script" uid="uid://cwv0n52mn1n0k" path="res://scenes/main_scene.gd" id="1_tbgi4"]
 [ext_resource type="Script" uid="uid://cf0ebjoqwsgky" path="res://core/ik_controller.gd" id="2_tefeu"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://d218u27sl8kf8" path="res://ui/ik_control_panel.gd" id="5_85g3d"]
 [ext_resource type="Script" uid="uid://r7vnaa5a2eu2" path="res://core/camera_auto_fit.gd" id="6_o6xl0"]
 [ext_resource type="Script" uid="uid://ivj52hx2vhln" path="res://core/ik_chain.gd" id="6_tefeu"]
+[ext_resource type="Script" uid="uid://puunhec35bp1" path="res://visualization/grid_visualizer.gd" id="8_tipki"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tefeu"]
 sky_top_color = Color(0.546, 0.57199997, 0.65, 1)
@@ -81,6 +82,10 @@ text = "Enable Target Movement"
 layout_mode = 2
 text = "Auto Solve"
 
+[node name="TargetPositionLabel" type="Label" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
+layout_mode = 2
+text = "Target Position:"
+
 [node name="TargetPositionX" type="SpinBox" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
 layout_mode = 2
 step = 0.1
@@ -144,6 +149,39 @@ layout_mode = 2
 min_value = -89.0
 max_value = 89.0
 
+[node name="GridButtonContainer" type="HBoxContainer" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="XYContainer" type="VBoxContainer" parent="CanvasLayer/IKControlPanel/VBoxContainer/GridButtonContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/IKControlPanel/VBoxContainer/GridButtonContainer/XYContainer"]
+layout_mode = 2
+text = "Display XY plane  "
+
+[node name="XYCheckbox" type="CheckBox" parent="CanvasLayer/IKControlPanel/VBoxContainer/GridButtonContainer/XYContainer"]
+layout_mode = 2
+
+[node name="XZContainer" type="VBoxContainer" parent="CanvasLayer/IKControlPanel/VBoxContainer/GridButtonContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/IKControlPanel/VBoxContainer/GridButtonContainer/XZContainer"]
+layout_mode = 2
+text = "Display XZ plane  "
+
+[node name="XZCheckbox" type="CheckBox" parent="CanvasLayer/IKControlPanel/VBoxContainer/GridButtonContainer/XZContainer"]
+layout_mode = 2
+
+[node name="YZ" type="VBoxContainer" parent="CanvasLayer/IKControlPanel/VBoxContainer/GridButtonContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/IKControlPanel/VBoxContainer/GridButtonContainer/YZ"]
+layout_mode = 2
+text = "Display YZ plane  "
+
+[node name="YZCheckbox" type="CheckBox" parent="CanvasLayer/IKControlPanel/VBoxContainer/GridButtonContainer/YZ"]
+layout_mode = 2
+
 [node name="StepInfoLabel" type="Label" parent="CanvasLayer/IKControlPanel/VBoxContainer"]
 layout_mode = 2
 
@@ -152,3 +190,8 @@ layout_mode = 2
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_o6xl0")
+
+[node name="GridVisualizer" type="MeshInstance3D" parent="."]
+script = ExtResource("8_tipki")
+color = Color(0, 0, 0, 1)
+metadata/_custom_type_script = "uid://puunhec35bp1"
